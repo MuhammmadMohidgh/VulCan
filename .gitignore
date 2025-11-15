@@ -1,0 +1,10 @@
+check_ethereal_account.py
+create_ethereal_account.py
+server/create_ethereal_account.py
+.env
+server/.env
+server/__pycache__/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
