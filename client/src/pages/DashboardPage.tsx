@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Shield, Globe, AlertTriangle, CheckCircle, Clock, TrendingUp, Zap, Search, Lock, Eye } from 'lucide-react'
 import { toast } from 'sonner'
 import { apiService } from '@/services'
@@ -23,6 +23,7 @@ interface ScanStats {
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuthStore()
+  const navigate = useNavigate()
   const [stats, setStats] = useState<ScanStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -176,7 +177,7 @@ const DashboardPage: React.FC = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Scans</p>
@@ -188,7 +189,7 @@ const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">High Risk</p>
@@ -200,7 +201,7 @@ const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Average Score</p>
@@ -214,7 +215,7 @@ const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Secure Sites</p>
@@ -241,7 +242,7 @@ const DashboardPage: React.FC = () => {
                 View all scans →
               </Link>
             </div>
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -265,7 +266,11 @@ const DashboardPage: React.FC = () => {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {stats.recent_scans.slice(0, 5).map((scan) => (
-                      <tr key={scan.id} className="hover:bg-gray-50">
+                      <tr 
+                        key={scan.id} 
+                        onClick={() => navigate(`/results/${scan.id}`)}
+                        className="hover:bg-gray-50 cursor-pointer transition-colors duration-150"
+                      >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <Globe className="w-4 h-4 text-gray-400 mr-2" />

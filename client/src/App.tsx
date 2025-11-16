@@ -19,7 +19,7 @@ function App() {
   const { isAuthenticated, isVerified } = useAuthStore()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 font-inter text-white">
       <Routes>
         {/* Public routes */}
         <Route 
@@ -47,6 +47,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="scan" element={<ScanPage />} />
+          <Route path="results" element={<ResultsPage />} />
           <Route path="results/:scanId" element={<ResultsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="settings" element={<SettingsPage />} />

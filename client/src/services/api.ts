@@ -34,10 +34,17 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
+    // Skip automatic 401 handling for vulnerability scan endpoints to allow fallback
+    if (error.config?.url?.includes('/vulnerability/scan') && error.response?.status === 401) {
+      // Let the scan page handle the 401 error for fallback to demo scan
+      return Promise.reject(error)
+    }
+    
     if (error.response?.status === 401) {
       // Unauthorized - logout user
       useAuthStore.getState().logout()
-      window.location.href = '/login'
+      // redirect to the right route used in the app
+      window.location.href = '/auth/login'
       toast.error('Session expired. Please login again.')
     } else if (error.response?.status === 403) {
       toast.error('Access denied. You do not have permission to perform this action.')

@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts Integration */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
-
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
@@ -224,11 +221,11 @@
 
 /* Enhanced Sidebar styles */
 .sidebar-item {
-  @apply flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-secondary-100 hover:text-secondary-900 hover:translate-x-1 hover:shadow-md;
+  @apply flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1 hover:shadow-md text-white/80;
 }
 
 .sidebar-item-active {
-  @apply bg-primary-100 text-primary-700 border-r-2 border-primary-500 hover:bg-primary-200 hover:text-primary-800;
+  @apply bg-white/10 text-white border-r-2 border-white/20 hover:bg-white/20 hover:text-white;
 }
 
 .sidebar-item-icon {
