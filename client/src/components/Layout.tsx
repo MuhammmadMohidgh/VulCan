@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuthStore()
@@ -43,15 +44,15 @@ const Layout: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-secondary-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 text-white">
       {/* Sidebar for mobile */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white shadow-xl">
+        <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white/5 backdrop-blur-lg shadow-xl border-r border-white/20">
           <div className="flex h-16 items-center justify-between px-6 border-b border-secondary-200">
             <div className="flex items-center space-x-3">
-              <Shield className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-secondary-900">VulnScanner</span>
+              <Shield className="h-8 w-8 text-white" />
+              <span className="text-xl font-bold text-white">VulCan</span>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -69,7 +70,7 @@ const Layout: React.FC = () => {
                   to={item.href}
                   onClick={() => setSidebarOpen(false)}
                   className={`sidebar-item ${
-                    isActive(item.href) ? 'sidebar-item-active' : 'text-secondary-700 hover:bg-secondary-100'
+                    isActive(item.href) ? 'sidebar-item-active' : 'text-white/80 hover:bg-white/10'
                   }`}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
@@ -79,10 +80,10 @@ const Layout: React.FC = () => {
             </nav>
           </div>
           
-          <div className="border-t border-secondary-200 p-4">
+          <div className="border-t border-white/20 p-4">
             <button
               onClick={handleLogout}
-              className="flex w-full items-center px-4 py-3 text-sm font-medium text-secondary-700 rounded-lg hover:bg-secondary-100"
+              className="flex w-full items-center px-4 py-3 text-sm font-medium text-white rounded-lg hover:bg-white/10"
             >
               <LogOut className="mr-3 h-5 w-5" />
               Logout
@@ -92,15 +93,23 @@ const Layout: React.FC = () => {
       </div>
 
       {/* Sidebar for desktop */}
-      <div className="hidden lg:flex lg:w-64 lg:flex-col">
-        <div className="flex h-16 items-center justify-center border-b border-secondary-200 bg-white">
+      <div className={`hidden lg:flex lg:flex-col ${collapsed ? 'lg:w-20' : 'lg:w-64'}`}>
+        <div className="flex h-16 items-center justify-center border-b border-white/20 bg-white/5 backdrop-blur-lg">
           <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-secondary-900">VulnScanner</span>
+            <Shield className="h-8 w-8 text-white" />
+            {!collapsed && <span className="text-xl font-bold text-white">VulCan</span>}
           </div>
+          {/* collapse toggle */}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="ml-auto mr-2 p-1 rounded hover:bg-white/5"
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? <Menu className="h-5 w-5 text-white" /> : <X className="h-5 w-5 text-white" />}
+          </button>
         </div>
         
-        <div className="flex flex-1 flex-col overflow-y-auto border-r border-secondary-200 bg-white">
+        <div className="flex flex-1 flex-col overflow-y-auto border-r border-white/20 bg-white/5 backdrop-blur-lg">
           <div className="p-4">
             <nav className="space-y-2">
               {navigation.map((item) => (
@@ -108,23 +117,25 @@ const Layout: React.FC = () => {
                   key={item.name}
                   to={item.href}
                   className={`sidebar-item ${
-                    isActive(item.href) ? 'sidebar-item-active' : 'text-secondary-700 hover:bg-secondary-100'
-                  }`}
+                    isActive(item.href) ? 'sidebar-item-active' : 'text-white/80 hover:bg-white/10'
+                  } ${collapsed ? 'justify-center' : ''}`}
+                  title={collapsed ? item.name : ''}
                 >
-                  <item.icon className="mr-3 h-5 w-5" />
-                  {item.name}
+                  <item.icon className={`h-5 w-5 ${!collapsed ? 'mr-3' : ''}`} />
+                  {!collapsed && item.name}
                 </Link>
               ))}
             </nav>
           </div>
           
-          <div className="mt-auto border-t border-secondary-200 p-4">
+          <div className="mt-auto border-t border-white/20 p-4">
             <button
               onClick={handleLogout}
-              className="flex w-full items-center px-4 py-3 text-sm font-medium text-secondary-700 rounded-lg hover:bg-secondary-100"
+              className={`flex w-full items-center px-4 py-3 text-sm font-medium text-white rounded-lg hover:bg-white/10 ${collapsed ? 'justify-center' : ''}`}
+              title={collapsed ? 'Logout' : ''}
             >
-              <LogOut className="mr-3 h-5 w-5" />
-              Logout
+              <LogOut className={`h-5 w-5 ${!collapsed ? 'mr-3' : ''}`} />
+              {!collapsed && 'Logout'}
             </button>
           </div>
         </div>
@@ -133,7 +144,7 @@ const Layout: React.FC = () => {
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <div className="flex h-16 items-center justify-between border-b border-secondary-200 bg-white px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between border-b border-white/20 bg-white/5 backdrop-blur-lg px-6 lg:px-8">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -142,8 +153,8 @@ const Layout: React.FC = () => {
               <Menu className="h-5 w-5 text-secondary-500" />
             </button>
             <div className="flex items-center space-x-2">
-              <Activity className="h-5 w-5 text-primary-600" />
-              <h1 className="text-lg font-semibold text-secondary-900">
+              <Activity className="h-5 w-5 text-white" />
+              <h1 className="text-lg font-semibold text-white">
                 {location.pathname === '/dashboard' && 'Dashboard'}
                 {location.pathname === '/scan' && 'New Vulnerability Scan'}
                 {location.pathname.startsWith('/results') && 'Scan Results'}
@@ -155,11 +166,11 @@ const Layout: React.FC = () => {
           
           <div className="flex items-center space-x-4">
             <div className="hidden lg:block text-right">
-              <p className="text-sm font-medium text-secondary-900">{user?.name}</p>
-              <p className="text-xs text-secondary-500">{user?.email}</p>
+              <p className="text-sm font-medium text-white">{user?.name}</p>
+              <p className="text-xs text-white/70">{user?.email}</p>
             </div>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100">
-              <span className="text-sm font-medium text-primary-700">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+              <span className="text-sm font-medium text-white">
                 {user?.name?.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -167,10 +178,8 @@ const Layout: React.FC = () => {
         </div>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-secondary-50">
-          <div className="p-6 lg:p-8">
-            <Outlet />
-          </div>
+        <main className="flex-1 overflow-y-auto bg-gray-50">
+          <Outlet />
         </main>
       </div>
     </div>

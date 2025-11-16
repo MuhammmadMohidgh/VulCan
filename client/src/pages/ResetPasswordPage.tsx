@@ -18,6 +18,7 @@ const ResetPasswordPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState<'verify' | 'reset'>('verify')
+  const [resetToken, setResetToken] = useState<string | null>(null)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([])
@@ -30,6 +31,10 @@ const ResetPasswordPage: React.FC = () => {
     
     if (emailToUse) {
       setEmail(emailToUse)
+      if (location.state?.token) {
+        setResetToken(location.state.token)
+        setStep('reset')
+      }
     } else {
       // No email found, redirect to forgot password
       navigate('/auth/forgot-password')
@@ -107,13 +112,16 @@ const ResetPasswordPage: React.FC = () => {
     setIsLoading(true)
     
     try {
-      await apiService.verifyResetOtp({
+      const res = await apiService.verifyResetOtp({
         email,
         otp: otpCode
       })
       
-      toast.success('Verification successful! Please enter your new password.')
-      setStep('reset')
+      if (res.token) {
+        setResetToken(res.token)
+        toast.success('Verification successful! Please enter your new password.')
+        setStep('reset')
+      }
     } catch (error: any) {
       if (error.response?.data?.error) {
         toast.error(error.response.data.error)
@@ -144,22 +152,13 @@ const ResetPasswordPage: React.FC = () => {
     setIsLoading(true)
     
     try {
-      const otpCode = otp.join('')
       const response = await apiService.resetPassword({
-        token: otpCode,
+        token: resetToken || '',
         new_password: newPassword
       })
       
-      if (response.success) {
-        toast.success('Password reset successful! You can now login with your new password.')
-        
-        // Auto-login user
-        setUser(response.user)
-        setToken(response.access_token)
-        
-        // Navigate to dashboard
-        navigate('/dashboard')
-      }
+      toast.success('Password reset successful! You can now login with your new password.')
+      navigate('/auth/login')
     } catch (error: any) {
       if (error.response?.data?.error) {
         toast.error(error.response.data.error)

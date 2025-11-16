@@ -6,6 +6,7 @@ interface User {
   name: string
   email: string
   is_verified: boolean
+  isVerified?: boolean
   role: string
 }
 
@@ -35,23 +36,43 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       error: null,
       
-      setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
+      setUser: (user) => set((state) => {
+        if (!user) {
+          return {
+            user: null,
+            isAuthenticated: !!state.token && false,
+            isVerified: false,
+          }
+        }
+        const verified = (user as any)?.is_verified ?? (user as any)?.isVerified ?? false
+        const normalizedUser = {
+          ...user,
+          // ensure both shapes exist for UI components
+          is_verified: verified,
+          isVerified: verified,
+        } as typeof user & { is_verified: boolean; isVerified: boolean }
+        return {
+          user: normalizedUser,
+          isAuthenticated: !!state.token && true,
+          isVerified: verified,
+        }
+      }),
+      setToken: (token) => set((state) => ({
+        token,
+        // update computed flags whenever we set a token
+        isAuthenticated: !!token && !!state.user,
+      })),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
       
       logout: () => {
-        set({ user: null, token: null, error: null })
+        set({ user: null, token: null, error: null, isAuthenticated: false, isVerified: false })
         localStorage.removeItem('auth-storage')
       },
       
-      get isAuthenticated() {
-        return !!get().token && !!get().user
-      },
-      
-      get isVerified() {
-        return get().user?.is_verified ?? false
-      },
+      // reactive booleans updated via setUser/setToken
+      isAuthenticated: false,
+      isVerified: false,
     }),
     {
       name: 'auth-storage',

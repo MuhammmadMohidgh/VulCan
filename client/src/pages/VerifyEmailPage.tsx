@@ -152,12 +152,10 @@ const VerifyEmailPage: React.FC = () => {
       <div className="max-w-md w-full mx-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-700 to-primary-900 rounded-full mb-4">
             <Mail className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Verify Your Email
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h1>
           <p className="text-gray-600">
             We've sent a 6-digit verification code to
           </p>
@@ -165,8 +163,8 @@ const VerifyEmailPage: React.FC = () => {
         </div>
 
         {/* Verification Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 backdrop-blur-sm bg-white/95">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-xl p-8 backdrop-blur-sm bg-white/95">
+            <form onSubmit={handleSubmit} className="space-y-6">
             {/* OTP Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-4">
@@ -197,7 +195,7 @@ const VerifyEmailPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading || otp.join('').length !== 6}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
+              className="w-full bg-primary-800 text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
             >
               {isLoading ? (
                 <>

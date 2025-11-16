@@ -112,7 +112,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white rounded-xl shadow-sm mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
           <div className="border-b border-gray-200">
             <nav className="flex space-x-8 px-6" aria-label="Tabs">
               {tabs.map((tab) => {
@@ -160,7 +160,7 @@ const SettingsPage: React.FC = () => {
                           type={showCurrentPassword ? 'text' : 'password'}
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
-                          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white text-gray-900"
                           placeholder="Enter current password"
                           required
                         />
@@ -192,7 +192,7 @@ const SettingsPage: React.FC = () => {
                           type={showNewPassword ? 'text' : 'password'}
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
-                          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white text-gray-900"
                           placeholder="Enter new password"
                           required
                         />
@@ -208,13 +208,13 @@ const SettingsPage: React.FC = () => {
                           )}
                         </button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-white/70 mt-1">
                         Must contain uppercase, lowercase, number, and be at least 6 characters
                       </p>
                     </div>
 
                     <div>
-                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/80 mb-2">
                         Confirm New Password
                       </label>
                       <div className="relative">
@@ -227,7 +227,7 @@ const SettingsPage: React.FC = () => {
                           type={showConfirmPassword ? 'text' : 'password'}
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                          className="block w-full pl-10 pr-10 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white/5 text-white"
                           placeholder="Confirm new password"
                           required
                         />
@@ -259,13 +259,13 @@ const SettingsPage: React.FC = () => {
                 {/* Two-Factor Authentication Section */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Two-Factor Authentication</h3>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-gray-900">Two-Factor Authentication</p>
                         <p className="text-xs text-gray-600 mt-1">Add an extra layer of security to your account</p>
                       </div>
-                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded">Coming Soon</span>
+                      <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded">Coming Soon</span>
                     </div>
                   </div>
                 </div>
@@ -326,7 +326,7 @@ const SettingsPage: React.FC = () => {
                       <select
                         value={privacy.profile_visibility}
                         onChange={(e) => handlePrivacyChange('profile_visibility', e.target.value)}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white text-gray-900"
                       >
                         <option value="private">Private - Only you can see your profile</option>
                         <option value="friends">Friends - Only friends can see your profile</option>

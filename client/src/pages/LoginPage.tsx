@@ -7,7 +7,7 @@ import { apiService } from '@/services'
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate()
-  const { setUser, setToken, setLoading, isLoading } = useAuthStore()
+  const { setUser, setToken, setLoading, isLoading, isAuthenticated } = useAuthStore()
   
   const [formData, setFormData] = useState({
     email: '',
@@ -20,6 +20,12 @@ const LoginPage: React.FC = () => {
     // Clear any previous errors
     setLoading(false)
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [isAuthenticated, navigate])
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {}
@@ -50,12 +56,12 @@ const LoginPage: React.FC = () => {
 
     try {
       const response = await apiService.login(formData)
-      
-      if (response.success) {
+
+      if (response.token) {
         setUser(response.user)
         setToken(response.token)
         toast.success('Login successful!')
-        navigate('/dashboard')
+        navigate('/dashboard', { replace: true })
       } else {
         setErrors({ general: response.error || 'Login failed' })
         toast.error(response.error || 'Login failed')
@@ -81,10 +87,8 @@ const LoginPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-2xl font-bold text-secondary-900">Welcome back</h3>
-        <p className="mt-2 text-sm text-secondary-600">
-          Sign in to your account to continue
-        </p>
+        <h3 className="text-2xl font-bold text-secondary-900">Welcome</h3>
+        <p className="mt-2 text-sm text-secondary-600">Sign in to continue</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -109,7 +113,7 @@ const LoginPage: React.FC = () => {
               type="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`form-input pl-10 ${errors.email ? 'border-danger-500' : ''}`}
+              className={`form-input pl-12 ${errors.email ? 'border-danger-500' : ''}`}
               placeholder="Enter your email"
               disabled={isLoading}
             />
@@ -133,7 +137,7 @@ const LoginPage: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleInputChange}
-              className={`form-input pl-10 pr-10 ${errors.password ? 'border-danger-500' : ''}`}
+              className={`form-input pl-12 pr-12 ${errors.password ? 'border-danger-500' : ''}`}
               placeholder="Enter your password"
               disabled={isLoading}
             />
@@ -181,7 +185,7 @@ const LoginPage: React.FC = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-800 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? (
             <div className="flex items-center">

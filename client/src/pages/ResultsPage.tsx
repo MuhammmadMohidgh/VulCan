@@ -31,7 +31,7 @@ interface ScanDetails {
     description: string
     recommendation: string
     owasp_category: string
-    technical_details: string
+    technical_details: any
     cvss_score: number
   }>
 }
@@ -42,21 +42,46 @@ const ResultsPage: React.FC = () => {
   const [scan, setScan] = useState<ScanDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [noScans, setNoScans] = useState(false)
 
   useEffect(() => {
     if (scanId) {
-      loadScanResults()
+      loadScanResults(scanId)
+    } else {
+      loadLatestScanOrEmpty()
     }
   }, [scanId])
 
-  const loadScanResults = async () => {
+  const loadScanResults = async (id: string) => {
     try {
       setIsLoading(true)
-      const result = await apiService.getScanResults(scanId!)
+      const result = await apiService.getScanResults(id)
       setScan(result)
     } catch (error: any) {
       toast.error('Failed to load scan results')
       console.error('Scan results load error:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadLatestScanOrEmpty = async () => {
+    try {
+      setIsLoading(true)
+      setNoScans(false)
+      const list = await apiService.getUserScans(1, 0)
+      const scans = Array.isArray(list) ? list : (list?.scans || [])
+      if (!scans || scans.length === 0) {
+        setNoScans(true)
+        setScan(null)
+      } else {
+        await loadScanResults(scans[0].id)
+      }
+    } catch (error: any) {
+      console.error('Load latest scan error:', error)
+      toast.error('Failed to load scans')
+      setNoScans(true)
+      setScan(null)
     } finally {
       setIsLoading(false)
     }
@@ -213,6 +238,24 @@ const ResultsPage: React.FC = () => {
     )
   }
 
+  if (!isLoading && noScans) {
+    return (
+      <div className="p-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <AlertIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">No scans yet</h2>
+          <p className="text-gray-600 mb-6">You haven't run any vulnerability scans. Start your first scan to see results here.</p>
+          <Link
+            to="/scan"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          >
+            Start a Scan
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   if (!scan) {
     return (
       <div className="p-6">
@@ -279,7 +322,7 @@ const ResultsPage: React.FC = () => {
           </div>
 
           {/* Scan Info */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Scan Date</p>
@@ -314,7 +357,7 @@ const ResultsPage: React.FC = () => {
           {/* Findings List */}
           <div className="lg:col-span-2 space-y-6">
             {/* Security Score Overview */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Security Score Overview</h2>
               <div className="flex items-center justify-center">
                 <div className={`relative w-48 h-48 rounded-full ${getSecurityScoreBg(scan.security_score)} flex items-center justify-center`}>
@@ -352,14 +395,14 @@ const ResultsPage: React.FC = () => {
                   <div className="text-2xl font-bold text-green-600">
                     {scan.findings.filter(f => f.severity === 'info').length}
                   </div>
-                  <div className="text-xs text-gray-600">Info</div>
+                  <div className="text-xs text-white/70">Info</div>
                 </div>
               </div>
             </div>
 
             {/* Detailed Findings */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Detailed Findings</h2>
+            <div className="bg-white/5 rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-white mb-4">Detailed Findings</h2>
               {scan.findings.length === 0 ? (
                 <div className="text-center py-8">
                   <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />

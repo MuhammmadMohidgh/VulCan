@@ -84,6 +84,8 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="p-6">
       <div className="max-w-4xl mx-auto">
+        {/** normalize verified flag from either shape */}
+        {(() => { /* placeholder for TS: computed inline */ })}
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
@@ -95,13 +97,13 @@ const ProfilePage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">Personal Information</h2>
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-500 rounded-lg hover:bg-blue-700 transition-colors duration-200"
                   >
                     <Edit3 className="w-4 h-4 mr-2" />
                     Edit Profile
@@ -125,7 +127,7 @@ const ProfilePage: React.FC = () => {
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white text-gray-900"
                         placeholder="Enter your full name"
                         required
                         disabled={isLoading}
@@ -147,7 +149,7 @@ const ProfilePage: React.FC = () => {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 bg-white text-gray-900"
                         placeholder="Enter your email address"
                         required
                         disabled={isLoading}
@@ -168,7 +170,7 @@ const ProfilePage: React.FC = () => {
                       type="button"
                       onClick={handleCancel}
                       disabled={isLoading}
-                      className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-200"
+                      className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors duration-200"
                     >
                       <X className="w-4 h-4 mr-2" />
                       Cancel
@@ -178,7 +180,7 @@ const ProfilePage: React.FC = () => {
               ) : (
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Full Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <div className="flex items-center">
                       <User className="w-5 h-5 text-gray-400 mr-3" />
                       <span className="text-gray-900 font-medium">{user.name}</span>
@@ -186,7 +188,7 @@ const ProfilePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Email Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <div className="flex items-center">
                       <Mail className="w-5 h-5 text-gray-400 mr-3" />
                       <span className="text-gray-900">{user.email}</span>
@@ -194,17 +196,22 @@ const ProfilePage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Account Status</label>
-                    <div className="flex items-center">
-                      <Shield className="w-5 h-5 text-green-500 mr-3" />
-                      <span className="text-green-600 font-medium">
-                        {user.is_verified ? 'Verified' : 'Unverified'}
-                      </span>
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Account Status</label>
+                    {(() => {
+                      const verified = (user as any)?.is_verified ?? (user as any)?.isVerified ?? false
+                      return (
+                        <div className="flex items-center">
+                          <Shield className={`w-5 h-5 mr-3 ${verified ? 'text-green-500' : 'text-red-500'}`} />
+                          <span className={`font-medium ${verified ? 'text-green-700' : 'text-red-600'}`}>
+                            {verified ? 'Verified' : 'Unverified'}
+                          </span>
+                        </div>
+                      )
+                    })()}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Member Since</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
                     <div className="flex items-center">
                       <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                       <span className="text-gray-900">
@@ -220,7 +227,7 @@ const ProfilePage: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Profile Picture */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
               <div className="text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -229,7 +236,7 @@ const ProfilePage: React.FC = () => {
                 <p className="text-sm text-gray-600 mb-4">Your avatar</p>
                 <button
                   type="button"
-                  className="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-colors duration-200"
                   disabled
                 >
                   Change Photo (Coming Soon)
@@ -238,20 +245,20 @@ const ProfilePage: React.FC = () => {
             </div>
 
             {/* Account Security */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Security</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Two-Factor Authentication</span>
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Coming Soon</span>
+                  <span className="text-sm text-gray-700">Two-Factor Authentication</span>
+                  <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">Coming Soon</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Login History</span>
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Coming Soon</span>
+                  <span className="text-sm text-gray-700">Login History</span>
+                  <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">Coming Soon</span>
                 </div>
                 <Link
                   to="/settings"
-                  className="block w-full text-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+                  className="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-500 rounded-lg hover:bg-blue-700 transition-colors duration-200"
                 >
                   Security Settings
                 </Link>
