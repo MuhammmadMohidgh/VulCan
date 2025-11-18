@@ -48,7 +48,7 @@ const ForgotPasswordPage: React.FC = () => {
       <div className="space-y-6">
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-800 rounded-full mb-4">
-            <Mail className="w-8 h-8 text-white" />
+            <Mail className="w-8 h-8 text-black" />
           </div>
           <h1 className="text-3xl font-bold text-secondary-900 mb-2">Check Your Email</h1>
           <p className="text-secondary-600">We've sent password reset instructions to</p>

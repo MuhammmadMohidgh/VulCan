@@ -395,14 +395,14 @@ const ResultsPage: React.FC = () => {
                   <div className="text-2xl font-bold text-green-600">
                     {scan.findings.filter(f => f.severity === 'info').length}
                   </div>
-                  <div className="text-xs text-white/70">Info</div>
+                  <div className="text-xs text-gray-600">Info</div>
                 </div>
               </div>
             </div>
 
             {/* Detailed Findings */}
-            <div className="bg-white/5 rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Detailed Findings</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Detailed Findings</h2>
               {scan.findings.length === 0 ? (
                 <div className="text-center py-8">
                   <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -411,8 +411,8 @@ const ResultsPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {scan.findings.map((finding, index) => (
-                    <div key={index} className={`border rounded-lg p-4 ${getSeverityColor(finding.severity)}`}>
+                  {scan.findings.map((finding) => (
+                    <div key={finding.id} className={`border rounded-lg p-4 ${getSeverityColor(finding.severity)}`}>
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-start">
                           {getSeverityIcon(finding.severity)}
@@ -438,13 +438,17 @@ const ResultsPage: React.FC = () => {
                       <p className="text-gray-700 text-sm mb-3">{finding.description}</p>
                       
                       {finding.technical_details && (
-                        <div className="bg-white rounded-lg p-3 mb-3">
+                        <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-200">
                           <p className="text-xs font-medium text-gray-900 mb-1">Technical Details:</p>
-                          <p className="text-xs text-gray-600 font-mono">{finding.technical_details}</p>
+                          <p className="text-xs text-gray-600 font-mono whitespace-pre-wrap">
+                            {typeof finding.technical_details === 'string' 
+                              ? finding.technical_details 
+                              : JSON.stringify(finding.technical_details, null, 2)}
+                          </p>
                         </div>
                       )}
                       
-                      <div className="bg-white rounded-lg p-3">
+                      <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                         <p className="text-xs font-medium text-gray-900 mb-1">Recommendation:</p>
                         <p className="text-xs text-gray-700">{finding.recommendation}</p>
                       </div>

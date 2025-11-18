@@ -49,7 +49,7 @@ const Layout: React.FC = () => {
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white/5 backdrop-blur-lg shadow-xl border-r border-white/20">
-          <div className="flex h-16 items-center justify-between px-6 border-b border-secondary-200">
+          <div className="flex h-16 items-center justify-between px-6 border-b pl-2 border-secondary-200">
             <div className="flex items-center space-x-3">
               <Shield className="h-8 w-8 text-white" />
               <span className="text-xl font-bold text-white">VulCan</span>
@@ -94,7 +94,7 @@ const Layout: React.FC = () => {
 
       {/* Sidebar for desktop */}
       <div className={`hidden lg:flex lg:flex-col ${collapsed ? 'lg:w-20' : 'lg:w-64'}`}>
-        <div className="flex h-16 items-center justify-center border-b border-white/20 bg-white/5 backdrop-blur-lg">
+        <div className="flex h-16 items-center justify-center pl-4 border-b border-white/20 bg-white/5 backdrop-blur-lg">
           <div className="flex items-center space-x-3">
             <Shield className="h-8 w-8 text-white" />
             {!collapsed && <span className="text-xl font-bold text-white">VulCan</span>}
@@ -131,10 +131,10 @@ const Layout: React.FC = () => {
           <div className="mt-auto border-t border-white/20 p-4">
             <button
               onClick={handleLogout}
-              className={`flex w-full items-center px-4 py-3 text-sm font-medium text-white rounded-lg hover:bg-white/10 ${collapsed ? 'justify-center' : ''}`}
+              className={`flex w-full items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-600 hover:text-white ${collapsed ? 'justify-center' : ''}`}
               title={collapsed ? 'Logout' : ''}
             >
-              <LogOut className={`h-5 w-5 ${!collapsed ? 'mr-3' : ''}`} />
+              <LogOut className={`h-5 w-5  ${!collapsed ? 'mr-3' : ''}`} />
               {!collapsed && 'Logout'}
             </button>
           </div>

@@ -208,13 +208,13 @@ const SettingsPage: React.FC = () => {
                           )}
                         </button>
                       </div>
-                      <p className="text-xs text-white/70 mt-1">
+                      <p className="text-xs text-white/70">
                         Must contain uppercase, lowercase, number, and be at least 6 characters
                       </p>
                     </div>
 
                     <div>
-                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/80 mb-2">
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-black/80 mb-2">
                         Confirm New Password
                       </label>
                       <div className="relative">

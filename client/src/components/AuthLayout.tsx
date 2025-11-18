@@ -13,7 +13,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         <span className="text-white text-3xl font-extrabold tracking-wide">VulCan.</span>
       </div>
       <div className="max-w-md w-full mt-24">
-        <div className="bg-white/80 backdrop-blur-md rounded-lg shadow-xl border border-white/20 p-8">
+        <div className="bg-white/80 backdrop-blur-md rounded-lg text-black shadow-xl border border-white/20 p-8">
           {children}
         </div>
       </div>

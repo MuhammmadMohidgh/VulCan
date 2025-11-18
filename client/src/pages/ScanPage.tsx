@@ -26,7 +26,6 @@ const ScanPage: React.FC = () => {
   const [isScanning, setIsScanning] = useState(false)
   const [scanResult, setScanResult] = useState<ScanResult | null>(null)
   const [scanType, setScanType] = useState<'basic' | 'comprehensive' | 'enterprise'>('basic')
-  const [debugInfo, setDebugInfo] = useState<string[]>([])
 
   // Get scan type from URL parameters
   useEffect(() => {
@@ -36,10 +35,6 @@ const ScanPage: React.FC = () => {
       setScanType(type)
     }
   }, [location.search])
-
-  const addDebugInfo = (info: string) => {
-    setDebugInfo(prev => [...prev, `${new Date().toLocaleTimeString()}: ${info}`])
-  }
 
   const validateUrl = (url: string): boolean => {
     try {
@@ -65,16 +60,12 @@ const ScanPage: React.FC = () => {
 
     setIsScanning(true)
     setScanResult(null)
-    setDebugInfo([])
-    addDebugInfo('Starting scan process...')
     
     try {
       // Try authenticated scan first
-      addDebugInfo('Attempting authenticated scan...')
       const response = await apiService.startVulnerabilityScan(targetUrl)
       
       if (response.scan_id) {
-        addDebugInfo(`Authenticated scan started, scan_id: ${response.scan_id}`)
         toast.success('Scan started! This may take a few minutes.')
         // Poll for results
         pollScanResults(response.scan_id)
@@ -82,21 +73,14 @@ const ScanPage: React.FC = () => {
         throw new Error('No scan ID received')
       }
     } catch (error: any) {
-      addDebugInfo(`Authenticated scan failed: ${error.message}`)
       console.error('Authenticated scan failed, trying demo scan...', error)
       
       // If authentication failed, try demo scan
       if (error.response?.status === 401 || error.response?.status === 403) {
-        addDebugInfo('Authentication failed, trying demo scan...')
         try {
-          addDebugInfo('Calling demo scan endpoint...')
           const demoResponse = await apiService.demoVulnerabilityScan(targetUrl)
           
-          addDebugInfo(`Demo scan response received: ${JSON.stringify(demoResponse, null, 2)}`)
-          
           if (demoResponse.success) {
-            addDebugInfo('Demo scan successful, processing results...')
-            
             // Transform findings to match expected format
             const findings = (demoResponse.findings || []).map((finding: any) => ({
               id: finding.id,
@@ -107,27 +91,22 @@ const ScanPage: React.FC = () => {
               owasp_category: finding.owasp_category
             }))
             
-            addDebugInfo(`Transformed ${findings.length} findings`)
-            
             // Use demo results directly since it's immediate
             const scanResult = {
               scan_id: demoResponse.scan?.id || 'demo-scan',
               status: 'completed' as const,
-              message: 'Demo scan completed (limited functionality)',
+              message: 'Demo scan completed',
               security_score: demoResponse.scan?.security_score,
               findings: findings
             }
             
-            addDebugInfo('Setting scan result and stopping scanning...')
             setScanResult(scanResult)
             setIsScanning(false)
-            toast.success('Demo scan completed!')
+            toast.success('Scan completed!')
           } else {
-            throw new Error('Demo scan also failed: ' + (demoResponse.error || 'Unknown error'))
+            throw new Error('Demo scan failed: ' + (demoResponse.error || 'Unknown error'))
           }
         } catch (demoError: any) {
-          addDebugInfo(`Demo scan also failed: ${demoError.message}`)
-          console.error('Demo scan also failed:', demoError)
           
           let errorMessage = 'Failed to start scan. Please try again.'
           if (demoError.response?.data?.error) {
@@ -157,38 +136,56 @@ const ScanPage: React.FC = () => {
   }
 
   const pollScanResults = async (scanId: string) => {
-    const maxAttempts = 60 // 5 minutes with 5-second intervals
+    const maxAttempts = 60
     let attempts = 0
-    addDebugInfo(`Starting to poll for scan results: ${scanId}`)
     
     const poll = async () => {
       try {
         attempts++
-        addDebugInfo(`Polling attempt ${attempts} for scan ${scanId}`)
         const result = await apiService.getScanResults(scanId)
-        addDebugInfo(`Poll result: ${JSON.stringify(result, null, 2)}`)
         
         if (result.status === 'completed') {
-          addDebugInfo('Scan completed successfully!')
           setScanResult(result)
           setIsScanning(false)
           toast.success('Scan completed successfully!')
         } else if (result.status === 'failed') {
-          addDebugInfo(`Scan failed: ${result.message}`)
           setScanResult(result)
           setIsScanning(false)
           toast.error(result.message || 'Scan failed')
+        } else if (attempts === 10) {
+          try {
+            const forced = await apiService.processScan(scanId)
+            if (forced.status === 'completed' || forced.scan?.scan_status === 'completed') {
+              const data = forced.status ? forced : {
+                id: forced.scan.id,
+                target_url: forced.scan.target_url,
+                status: forced.scan.scan_status,
+                security_score: forced.scan.security_score,
+                created_at: forced.scan.started_at,
+                updated_at: forced.scan.completed_at,
+                findings: forced.findings || []
+              }
+              setScanResult(data)
+              setIsScanning(false)
+              toast.success('Scan completed successfully!')
+            } else if (forced.status === 'failed') {
+              setScanResult(forced)
+              setIsScanning(false)
+              toast.error(forced.message || 'Scan failed')
+            } else {
+              setTimeout(poll, 5000)
+            }
+          } catch (e: any) {
+            setTimeout(poll, 5000)
+          }
         } else if (attempts >= maxAttempts) {
-          addDebugInfo('Scan timeout after maximum attempts')
           setIsScanning(false)
           toast.error('Scan timeout. Please try again.')
         } else {
-          addDebugInfo(`Scan still ${result.status}, continuing polling...`)
           // Continue polling
           setTimeout(poll, 5000)
         }
       } catch (error: any) {
-        addDebugInfo(`Poll error on attempt ${attempts}: ${error.message}`)
         console.error(`Poll error on attempt ${attempts}:`, error)
         
         if (attempts >= maxAttempts) {
@@ -276,18 +273,6 @@ const ScanPage: React.FC = () => {
             Enter a website URL to perform a comprehensive security scan and identify potential vulnerabilities.
           </p>
         </div>
-
-        {/* Debug Info */}
-        {debugInfo.length > 0 && (
-          <div className="mb-6 bg-gray-100 border border-gray-300 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Debug Information:</h3>
-            <div className="text-xs text-gray-600 font-mono max-h-40 overflow-y-auto">
-              {debugInfo.map((info, index) => (
-                <div key={index}>{info}</div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Scan Type Selector */}
         <div className="mb-8">

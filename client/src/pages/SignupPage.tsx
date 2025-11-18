@@ -121,7 +121,7 @@ const SignupPage: React.FC = () => {
               type="text"
               value={formData.name}
               onChange={handleInputChange}
-              className={`form-input pl-12 ${errors.name ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.name ? 'border-danger-500' : ''}`}
               placeholder="Enter your full name"
               disabled={isLoading}
             />
@@ -145,7 +145,7 @@ const SignupPage: React.FC = () => {
               type="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`form-input pl-12 ${errors.email ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.email ? 'border-danger-500' : ''}`}
               placeholder="Enter your email"
               disabled={isLoading}
             />
@@ -169,7 +169,7 @@ const SignupPage: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleInputChange}
-              className={`form-input pl-12 pr-12 ${errors.password ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.password ? 'border-danger-500' : ''}`}
               placeholder="Create a strong password"
               disabled={isLoading}
             />
@@ -208,7 +208,7 @@ const SignupPage: React.FC = () => {
               type={showConfirmPassword ? 'text' : 'password'}
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              className={`form-input pl-12 pr-12 ${errors.confirmPassword ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.confirmPassword ? 'border-danger-500' : ''}`}
               placeholder="Confirm your password"
               disabled={isLoading}
             />

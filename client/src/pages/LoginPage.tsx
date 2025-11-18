@@ -104,7 +104,7 @@ const LoginPage: React.FC = () => {
             Email address
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Mail className="h-5 w-5 text-secondary-400" />
             </div>
             <input
@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
               type="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`form-input pl-12 ${errors.email ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.email ? 'border-danger-500' : ''}`}
               placeholder="Enter your email"
               disabled={isLoading}
             />
@@ -128,7 +128,7 @@ const LoginPage: React.FC = () => {
             Password
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Lock className="h-5 w-5 text-secondary-400" />
             </div>
             <input
@@ -137,7 +137,7 @@ const LoginPage: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={handleInputChange}
-              className={`form-input pl-12 pr-12 ${errors.password ? 'border-danger-500' : ''}`}
+              className={`form-input !pl-11 w-full ${errors.password ? 'border-danger-500' : ''}`}
               placeholder="Enter your password"
               disabled={isLoading}
             />

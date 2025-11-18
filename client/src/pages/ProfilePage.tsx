@@ -228,15 +228,15 @@ const ProfilePage: React.FC = () => {
           <div className="space-y-6">
             {/* Profile Picture */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Profile Picture</h3>
               <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-2 flex items-center justify-center">
                   <User className="w-12 h-12 text-white" />
                 </div>
-                <p className="text-sm text-gray-600 mb-4">Your avatar</p>
+                <p className="text-base text-gray-600 mb-2">Your avatar</p>
                 <button
                   type="button"
-                  className="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-colors duration-200"
+                  className="w-full inline-flex items-center justify-center px-4 py-2 text-sm whitespace-nowrap font-medium text-black bg-white/10 border border-black/20 rounded-lg hover:bg-white/20 transition-colors duration-200"
                   disabled
                 >
                   Change Photo (Coming Soon)
@@ -250,7 +250,7 @@ const ProfilePage: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-700">Two-Factor Authentication</span>
-                  <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">Coming Soon</span>
+                  <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 whitespace-nowrap rounded">Coming Soon</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-700">Login History</span>
