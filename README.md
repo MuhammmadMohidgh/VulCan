@@ -4,7 +4,7 @@
 
 ![VulCan Logo](https://img.shields.io/badge/VulCan-Security%20Scanner-blue?style=for-the-badge)
 
-A comprehensive web application vulnerability scanner built with FastAPI and React that performs OWASP Top 10 security assessments.
+A comprehensive web application vulnerability scanner built with FastAPI and React that performs OWASP Top 10 security assessments. **Now available as both a web app and browser extension!**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
@@ -23,6 +23,7 @@ A comprehensive web application vulnerability scanner built with FastAPI and Rea
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [Browser Extension](#browser-extension)
 - [Security Checks](#security-checks)
 - [Contributing](#contributing)
 - [License](#license)
@@ -58,6 +59,13 @@ A comprehensive web application vulnerability scanner built with FastAPI and Rea
 - **Real-time Updates** - Live scan status with polling
 - **Toast Notifications** - User-friendly feedback system
 
+### 🧩 Browser Extension (NEW!)
+- **One-Click Scanning** - Scan any webpage instantly from your browser
+- **Context Menu Integration** - Right-click to scan pages and links
+- **Lightweight & Fast** - Minimal resource usage
+- **Seamless Sync** - Uses same account and backend as web app
+- **Quick Results** - View security scores without leaving your browser
+
 ## 🛠️ Tech Stack
 
 ### Backend
@@ -70,7 +78,7 @@ A comprehensive web application vulnerability scanner built with FastAPI and Rea
 - **httpx** - Async HTTP client for scanning
 - **dnspython** - DNS resolution
 
-### Frontend
+### Frontend (Web App)
 - **React 18** - Modern UI library
 - **TypeScript** - Type-safe JavaScript
 - **Vite** - Fast build tool
@@ -81,11 +89,20 @@ A comprehensive web application vulnerability scanner built with FastAPI and Rea
 - **Sonner** - Toast notifications
 - **Lucide React** - Icon library
 
+### Browser Extension
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Chrome Manifest V3** - Latest extension standard
+- **Vite** - Build tool
+- **Chrome Storage API** - Secure token storage
+- **Chrome Tabs API** - Current page detection
+- **Chrome Context Menus** - Right-click integration
+
 ## 🏗️ Architecture
 
 ```
 VulCan/
-├── client/                 # React frontend
+├── client/                 # React frontend (Web App)
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
 │   │   ├── pages/         # Page components
@@ -94,7 +111,19 @@ VulCan/
 │   │   └── main.tsx       # Entry point
 │   └── package.json
 │
-├── server/                # FastAPI backend
+├── browser-extension/     # Chrome Extension (NEW!)
+│   ├── src/
+│   │   ├── popup/        # Extension popup UI
+│   │   ├── background/   # Service worker
+│   │   ├── content/      # Content scripts
+│   │   └── shared/       # Shared utilities (API client)
+│   ├── public/
+│   │   ├── manifest.json # Extension manifest
+│   │   └── icons/        # Extension icons
+│   ├── SETUP.md          # Extension setup guide
+│   └── package.json
+│
+├── server/                # FastAPI backend (Shared by both)
 │   ├── controllers/       # Business logic
 │   ├── routes/           # API endpoints
 │   ├── services/         # Core services (scanner, email)
@@ -220,6 +249,61 @@ VITE_API_URL=http://localhost:8000/api
    npm run dev
    ```
 4. **Access the application** at `http://localhost:5173`
+
+## 🧩 Browser Extension
+
+VulCan is now available as a lightweight Chrome extension for instant website scanning!
+
+### Features
+
+- ✅ **One-click scanning** of any webpage
+- ✅ **Right-click context menu** for quick scans
+- ✅ **Security scores** displayed instantly
+- ✅ **Scan history** synced with web app
+- ✅ **Same authentication** as web app
+
+### Installation
+
+1. **Navigate to extension folder**:
+   ```bash
+   cd browser-extension
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Build the extension**:
+   ```bash
+   npm run build
+   ```
+
+4. **Load in Chrome**:
+   - Open `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the `browser-extension/dist` folder
+
+5. **Login and scan!**
+
+For detailed setup instructions, see [browser-extension/SETUP.md](browser-extension/SETUP.md)
+
+### Usage
+
+**Method 1: Current Page Scan**
+1. Click the VulCan icon in your toolbar
+2. Click "Scan This Page"
+
+**Method 2: Context Menu**
+1. Right-click anywhere on a page
+2. Select "Scan this page with VulCan"
+
+**Method 3: Link Scanning**
+1. Right-click any hyperlink
+2. Select "Scan this link with VulCan"
+
+## 📖 Web App Usage
 
 ### Running a Scan
 

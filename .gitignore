@@ -11,3 +11,57 @@ __pycache__/
 *.pdf
 *.zip
 *.pptx
+*.md
+# Explicitly ignore repo link and README-like files
+RepoLink.txt
+**/[Rr][Ee][Aa][Dd][Mm][Ee]*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE settings
+.vscode/
+.idea/
+.history/
+
+# Logs and debug output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python virtual environments & build artifacts
+venv/
+.venv/
+server/venv/
+server/.venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+
+# Node/Frontend artifacts
+client/node_modules/
+client/dist/
+client/.env
+client/.cache/
+client/.vite/
+client/.turbo/
+
+# Browser extension build outputs
+browser-extension/node_modules/
+browser-extension/dist/
+browser-extension/.env
+browser-extension/.cache/
+browser-extension/.vite/
+
+# Database and local state files
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal

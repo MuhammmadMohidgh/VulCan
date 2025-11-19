@@ -67,21 +67,6 @@ const DashboardPage: React.FC = () => {
 
   const scanningCards = [
     {
-      id: 'basic',
-      title: 'Basic Security Scan',
-      description: 'Quick scan for common vulnerabilities and security headers',
-      icon: <Shield className="w-8 h-8" />,
-      features: [
-        'SSL/TLS Certificate Check',
-        'Security Headers Analysis',
-        'Basic Information Disclosure',
-        'DNS Security Check'
-      ],
-      duration: '2-3 minutes',
-      color: 'blue',
-      gradient: 'from-blue-500 to-blue-600'
-    },
-    {
       id: 'comprehensive',
       title: 'Comprehensive Vulnerability Scan',
       description: 'In-depth analysis covering OWASP Top 10 vulnerabilities',
@@ -89,30 +74,13 @@ const DashboardPage: React.FC = () => {
       features: [
         'OWASP Top 10 Detection',
         'Input Validation Testing',
-        'Authentication Bypass Tests',
-        'Injection Attack Detection',
-        'XSS & CSRF Vulnerability Scan'
+        'Security Headers & SSL/TLS',
+        'DNS & Subdomain Checks',
+        'Information Disclosure'
       ],
       duration: '5-8 minutes',
       color: 'purple',
       gradient: 'from-purple-500 to-purple-600'
-    },
-    {
-      id: 'enterprise',
-      title: 'Enterprise Security Audit',
-      description: 'Complete security assessment with detailed reporting',
-      icon: <Lock className="w-8 h-8" />,
-      features: [
-        'Advanced Threat Detection',
-        'Business Logic Testing',
-        'Rate Limiting Analysis',
-        'API Security Assessment',
-        'Configuration Review',
-        'Compliance Checking'
-      ],
-      duration: '10-15 minutes',
-      color: 'indigo',
-      gradient: 'from-indigo-500 to-indigo-600'
     }
   ]
 
@@ -314,10 +282,10 @@ const DashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* Scanning Cards */}
+        {/* Scanning Card */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Choose Your Security Scan</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Security Scan</h2>
+          <div className="grid grid-cols-1 gap-8">
             {scanningCards.map((card) => (
               <div
                 key={card.id}

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { toast } from 'sonner'
+import logo from '@/assets/logo.svg'
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -51,7 +52,7 @@ const Layout: React.FC = () => {
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white/5 backdrop-blur-lg shadow-xl border-r border-white/20">
           <div className="flex h-16 items-center justify-between px-6 border-b pl-2 border-secondary-200">
             <div className="flex items-center space-x-3">
-              <Shield className="h-8 w-8 text-white" />
+              <img src={logo} alt="VulCan Logo" className="h-8 w-8" />
               <span className="text-xl font-bold text-white">VulCan</span>
             </div>
             <button
@@ -96,7 +97,7 @@ const Layout: React.FC = () => {
       <div className={`hidden lg:flex lg:flex-col ${collapsed ? 'lg:w-20' : 'lg:w-64'}`}>
         <div className="flex h-16 items-center justify-center pl-4 border-b border-white/20 bg-white/5 backdrop-blur-lg">
           <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-white" />
+            <img src={logo} alt="VulCan Logo" className="h-8 w-8" />
             {!collapsed && <span className="text-xl font-bold text-white">VulCan</span>}
           </div>
           {/* collapse toggle */}

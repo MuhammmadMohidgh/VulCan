@@ -9,7 +9,7 @@ interface AuthLayoutProps {
 const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="absolute top-8 left-0 right-0 flex justify-center">
+      <div className="absolute top-16 left-0 right-0 flex justify-center">
         <span className="text-white text-3xl font-extrabold tracking-wide">VulCan.</span>
       </div>
       <div className="max-w-md w-full mt-24">

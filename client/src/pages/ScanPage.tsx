@@ -25,16 +25,11 @@ const ScanPage: React.FC = () => {
   const [targetUrl, setTargetUrl] = useState('')
   const [isScanning, setIsScanning] = useState(false)
   const [scanResult, setScanResult] = useState<ScanResult | null>(null)
-  const [scanType, setScanType] = useState<'basic' | 'comprehensive' | 'enterprise'>('basic')
+  // Single scan option retained; default comprehensive
+  const [scanType] = useState<'comprehensive'>('comprehensive')
 
   // Get scan type from URL parameters
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const type = params.get('type') as 'basic' | 'comprehensive' | 'enterprise'
-    if (type && ['basic', 'comprehensive', 'enterprise'].includes(type)) {
-      setScanType(type)
-    }
-  }, [location.search])
+  // No scan type selection needed; keeping URL param handling removed
 
   const validateUrl = (url: string): boolean => {
     try {
@@ -228,32 +223,13 @@ const ScanPage: React.FC = () => {
     return 'bg-red-100'
   }
 
-  const scanTypes = [
-    {
-      id: 'basic',
-      title: 'Basic Security Scan',
-      description: 'Quick scan for common vulnerabilities',
-      icon: <Shield className="w-6 h-6" />,
-      duration: '2-3 minutes',
-      color: 'blue'
-    },
-    {
-      id: 'comprehensive',
-      title: 'Comprehensive Vulnerability Scan',
-      description: 'In-depth OWASP Top 10 analysis',
-      icon: <Search className="w-6 h-6" />,
-      duration: '5-8 minutes',
-      color: 'purple'
-    },
-    {
-      id: 'enterprise',
-      title: 'Enterprise Security Audit',
-      description: 'Complete security assessment',
-      icon: <Globe className="w-6 h-6" />,
-      duration: '10-15 minutes',
-      color: 'indigo'
-    }
-  ]
+  // Single retained card info for presentation
+  const comprehensiveCard = {
+    title: 'Comprehensive Vulnerability Scan',
+    description: 'In-depth OWASP Top 10 analysis with headers, SSL/TLS, DNS, injection tests, disclosure and input validation.',
+    duration: '5-8 minutes',
+    gradient: 'from-purple-500 to-purple-600'
+  }
 
   return (
     <div className="p-6">
@@ -274,32 +250,23 @@ const ScanPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Scan Type Selector */}
+        {/* Scan Overview (single card) */}
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Select Scan Type</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {scanTypes.map((type) => (
-              <button
-                key={type.id}
-                onClick={() => setScanType(type.id as any)}
-                className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                  scanType === type.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300 bg-white'
-                }`}
-              >
-                <div className="flex items-center mb-2">
-                  <div className={`w-12 h-12 bg-${type.color}-100 rounded-lg flex items-center justify-center mr-3`}>
-                    <div className={`text-${type.color}-600`}>{type.icon}</div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{type.title}</h3>
-                    <p className="text-sm text-gray-600">{type.duration}</p>
+          <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200">
+              <div className={`bg-gradient-to-r ${comprehensiveCard.gradient} p-6 text-white`}>
+              <div className="flex items-center">
+                <div className="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                  <Search className="w-7 h-7" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold">{comprehensiveCard.title}</h3>
+                  <p className="text-purple-100 text-sm">{comprehensiveCard.description}</p>
+                  <div className="flex items-center mt-2 text-sm text-purple-100/90">
+                    <Clock className="w-4 h-4 mr-1" /> {comprehensiveCard.duration}
                   </div>
                 </div>
-                <p className="text-sm text-gray-600">{type.description}</p>
-              </button>
-            ))}
+              </div>
+            </div>
           </div>
         </div>
 
